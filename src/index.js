@@ -20,9 +20,8 @@ app.use(express.static(path.join(__dirname, "..", "public")));
 io.on("connection", (socket) => {
   connectedPeers.push(socket.id);
 
-  socket.on("disconnect", (reason) => {
+  socket.on("disconnect", () => {
     connectedPeers = connectedPeers.filter((peer) => peer !== socket.id);
-    console.log(connectedPeers);
   });
 });
 

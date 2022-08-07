@@ -1,5 +1,8 @@
+import * as store from "./store.js";
+
 const socket = io();
 
 socket.on("connect", () => {
-  console.log(`${socket.id} has connected to socket.io server`);
+  store.setSocketId(socket.id);
+  console.log(store.getState());
 });
