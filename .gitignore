@@ -1,0 +1,9 @@
+# dependencies
+/node_modules
+
+# environement variables
+.env
+.env.development
+.env.test
+
+# misc
