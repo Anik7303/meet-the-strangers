@@ -1,8 +1,26 @@
 import * as wss from "./wss.js";
 import * as constants from "./constants.js";
 import * as ui from "./ui.js";
+import * as store from "./store.js";
 
 let connectedUserDetails;
+
+const defaultConstrains = {
+  audio: true,
+  video: true,
+};
+
+export const getLocalPreview = () => {
+  if (navigator?.mediaDevices) {
+    navigator.mediaDevices
+      .getUserMedia(defaultConstrains)
+      .then((stream) => {
+        store.setLocalStream(stream);
+        ui.updateLocalVideo(stream);
+      })
+      .catch((err) => console.error(err));
+  }
+};
 
 const callingDialogRejectCallHandler = () => {
   console.log("rejecting the call");
