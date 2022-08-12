@@ -146,6 +146,31 @@ export const clearMessages = () => {
   messagesContainer.innerHTML = "";
 };
 
+// recording
+const recordingButtons = document.getElementById("video_recording_buttons");
+const startRecordingButton = document.getElementById("start_recording_button");
+const pauseRecordingButton = document.getElementById("pause_recording_button");
+const resumeRecordingButton = document.getElementById(
+  "resume_recording_button"
+);
+export const showRecordingPanel = () => {
+  showElement(recordingButtons);
+
+  // hide start recording button
+  hideElement(startRecordingButton);
+};
+
+export const toggleRecordingState = () => {
+  pauseRecordingButton.classList.toggle("display_none");
+  resumeRecordingButton.classList.toggle("display_none");
+};
+
+export const resetRecordingButtons = () => {
+  showElement(startRecordingButton);
+  // hide recording panel
+  hideElement(recordingButtons);
+};
+
 // ui helper function
 const enableDashboard = () => {
   const dashboardBlocker = document.getElementById("dashboard_blur");

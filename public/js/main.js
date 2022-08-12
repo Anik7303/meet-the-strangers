@@ -3,6 +3,7 @@ import * as wss from "./wss.js";
 import * as webRTCHandler from "./webRTCHandler.js";
 import * as constants from "./constants.js";
 import * as ui from "./ui.js";
+import * as recordingUtils from "./recordingUtils.js";
 
 // initialization of Socket.IO server connection
 const socket = io();
@@ -81,3 +82,32 @@ document.getElementById("send_message_button").addEventListener("click", () => {
   ui.appendMessage(message, true);
   newMessageInput.value = "";
 });
+
+// recording
+document
+  .getElementById("start_recording_button")
+  .addEventListener("click", () => {
+    recordingUtils.startRecording();
+    ui.showRecordingPanel();
+  });
+
+document
+  .getElementById("stop_recording_button")
+  .addEventListener("click", () => {
+    recordingUtils.stopRecording();
+    ui.resetRecordingButtons();
+  });
+
+document
+  .getElementById("pause_recording_button")
+  .addEventListener("click", () => {
+    recordingUtils.pauseRecording();
+    ui.toggleRecordingState();
+  });
+
+document
+  .getElementById("resume_recording_button")
+  .addEventListener("click", () => {
+    recordingUtils.resumeRecording();
+    ui.toggleRecordingState();
+  });
