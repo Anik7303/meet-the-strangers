@@ -1,0 +1,10 @@
+# node dependencies
+/node_modules
+
+# docker
+Dockerfile
+.dockerignore
+docker-compose.yml
+
+# misc
+.env
