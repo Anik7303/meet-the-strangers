@@ -260,7 +260,7 @@ body {
 .message_left_paragraph {
   background: #ffffff;
   border: 1px solid #d5deeb;
-  border-radius: 8px 8px 8px 0px;
+  border-radius: 100px 100px 100px 0px;
   padding: 20px 13px;
   color: #545c68;
   min-width: 60px;
@@ -275,7 +275,7 @@ body {
 .message_right_paragraph {
   background: linear-gradient(168.68deg, #0052c9 1.12%, #0a91db 100%);
   border: 1px solid #d5deeb;
-  border-radius: 8px 8px 8px 0px;
+  border-radius: 100px 100px 0px 100px;
   padding: 20px 13px;
   color: #ffffff;
   min-width: 60px;

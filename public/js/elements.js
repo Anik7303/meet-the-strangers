@@ -67,3 +67,11 @@ export const getInfoDialog = (title, description) => {
   `;
   return dialog;
 };
+
+export const getMessage = (message, right = false) => {
+  const side = right ? "right" : "left";
+  const container = document.createElement("div");
+  container.classList.add(`message_${side}_container`);
+  container.innerHTML = `<p class="message_${side}_paragraph">${message}</p>`;
+  return container;
+};

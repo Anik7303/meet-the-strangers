@@ -5,6 +5,7 @@ import * as store from "./store.js";
 
 let connectedUserDetails;
 let peerConnection;
+let dataChannel;
 
 const defaultConstrains = {
   audio: true,
@@ -38,8 +39,20 @@ export const getLocalPreview = () => {
 const createPeerConnection = () => {
   peerConnection = new RTCPeerConnection(configuration);
 
+  dataChannel = peerConnection.createDataChannel("chat");
+
+  peerConnection.ondatachannel = (event) => {
+    event.channel.addEventListener("open", () => {
+      console.log("datachannel ready to receive data");
+    });
+
+    event.channel.addEventListener("message", (event) => {
+      const message = JSON.parse(event.data);
+      ui.appendMessage(message);
+    });
+  };
+
   peerConnection.onicecandidate = (event) => {
-    console.log("getting ice candidate from stun server");
     if (event.candidate) {
       // send our ice candidates to other peer
       wss.sendDataUsingWebRTCSignaling({
@@ -75,6 +88,11 @@ const createPeerConnection = () => {
       peerConnection.addTrack(track, localStream);
     }
   }
+};
+
+export const sendMessageUsingDataChannel = (message) => {
+  const stringifiedMessage = JSON.stringify(message);
+  dataChannel.send(stringifiedMessage);
 };
 
 const callingDialogRejectCallHandler = () => {
@@ -160,8 +178,6 @@ export const handlePreOfferAnswer = async (data) => {
 };
 
 const sendWebRTCOffer = async () => {
-  console.log("sendWebRTCOffer");
-
   const offer = await peerConnection.createOffer();
   await peerConnection.setLocalDescription(offer);
   wss.sendDataUsingWebRTCSignaling({
@@ -172,8 +188,6 @@ const sendWebRTCOffer = async () => {
 };
 
 export const handleWebRTCOffer = async (data) => {
-  console.log("handleWebRTCOffer", data);
-
   await peerConnection.setRemoteDescription(data.offer);
   const answer = await peerConnection.createAnswer();
   await peerConnection.setLocalDescription(answer);
@@ -185,12 +199,10 @@ export const handleWebRTCOffer = async (data) => {
 };
 
 export const handleWebRTCAnswer = async (data) => {
-  console.log("handleWebRTCAnswer", data);
   await peerConnection.setRemoteDescription(data.answer);
 };
 
 export const handleWebRTCCandidate = async (data) => {
-  console.log("handleWebRTCCandidate", data);
   try {
     await peerConnection.addIceCandidate(data.candidate);
   } catch (err) {
@@ -206,7 +218,6 @@ export const switchBetweenCameraAndScreenSharing = async (
 ) => {
   if (screenSharingActive) {
     // go back to video track
-    console.log("switching back to camera");
     const localStream = store.getState().localStream;
     const videoTrack = localStream.getVideoTracks()[0];
     const sender = peerConnection
@@ -225,7 +236,7 @@ export const switchBetweenCameraAndScreenSharing = async (
     }
     return;
   }
-  console.log("switching for screen sharing");
+
   try {
     if (navigator?.mediaDevices) {
       const screenSharingStream = await navigator.mediaDevices.getDisplayMedia({

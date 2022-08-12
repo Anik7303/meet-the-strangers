@@ -99,8 +99,8 @@ const showChatCallElements = () => {
   );
   showElement(finishConnectionChatButtonContainer);
 
-  const newMessageInput = document.getElementById("new_message");
-  showElement(newMessageInput);
+  const newMessageContainer = document.getElementById("new_message");
+  showElement(newMessageContainer);
 
   // block panel
   disableDashboard();
@@ -115,6 +115,9 @@ const showVideoCallElements = () => {
 
   const remoteVideo = document.getElementById("remote_video");
   showElement(remoteVideo);
+
+  const newMessageContainer = document.getElementById("new_message");
+  showElement(newMessageContainer);
 
   //block panel
   disableDashboard();
@@ -131,6 +134,16 @@ export const updateCameraButton = (cameraActive) => {
   const cameraImage = cameraActive ? "camera.png" : "cameraOff.png";
   const buttonImage = document.getElementById("camera_button_image");
   buttonImage.setAttribute("src", `/images/${cameraImage}`);
+};
+
+// ui messages
+const messagesContainer = document.getElementById("messages_container");
+export const appendMessage = (message, right = false) => {
+  messagesContainer.appendChild(elements.getMessage(message, right));
+};
+
+export const clearMessages = () => {
+  messagesContainer.innerHTML = "";
 };
 
 // ui helper function
