@@ -18,6 +18,11 @@ export const updateLocalVideo = (stream) => {
   });
 };
 
+export const updateRemoteVideo = (stream) => {
+  const remoteVideo = document.getElementById("remote_video");
+  remoteVideo.srcObject = stream;
+};
+
 export const showIncomingCallDialog = (
   callType,
   acceptCallHandler,
@@ -113,6 +118,19 @@ const showVideoCallElements = () => {
 
   //block panel
   disableDashboard();
+};
+
+// ui call buttons
+export const updateMicButton = (micActive) => {
+  const micImage = micActive ? "mic.png" : "micOff.png";
+  const micButtonImage = document.getElementById("mic_button_image");
+  micButtonImage.setAttribute("src", `/images/${micImage}`);
+};
+
+export const updateCameraButton = (cameraActive) => {
+  const cameraImage = cameraActive ? "camera.png" : "cameraOff.png";
+  const buttonImage = document.getElementById("camera_button_image");
+  buttonImage.setAttribute("src", `/images/${cameraImage}`);
 };
 
 // ui helper function

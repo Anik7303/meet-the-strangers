@@ -49,6 +49,15 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on("webRTC-signaling", (data) => {
+    const { socketId } = data;
+    const connectedPeer = connectedPeers.find((peer) => socketId === peer);
+
+    if (connectedPeer) {
+      io.to(socketId).emit("webRTC-signaling", data);
+    }
+  });
+
   socket.on("disconnect", () => {
     connectedPeers = connectedPeers.filter((peer) => peer !== socket.id);
   });
