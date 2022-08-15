@@ -4,7 +4,7 @@ EXPOSE 8000
 
 VOLUME /usr/app
 
-ENV NODE_ENV=production
+ENV NODE_ENV=development
 ENV HOST=192.168.0.100
 ENV PORT=8000
 
@@ -16,4 +16,4 @@ RUN npm install && npm cache clear --force
 
 COPY . .
 
-CMD ["npm", "start"]
+CMD ["npm", "run", "start"]
