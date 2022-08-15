@@ -1,16 +1,24 @@
 if (process.env.NODE_ENV !== "production") require("dotenv").config();
-const http = require("http");
+const fs = require("fs");
+const https = require("https");
 const path = require("path");
 const express = require("express");
 const { Server } = require("socket.io");
 
+console.log(process.env.NODE_ENV);
+
+// tls certificates
+const keyFile = fs.readFileSync("key.pem");
+const certFile = fs.readFileSync("cert.pem");
+
 // variables
 const HOST = process.env.HOST || "localhost";
 const PORT = process.env.PORT || "5000";
+const httpsOptions = { key: keyFile, cert: certFile };
 
 const app = express();
-const httpServer = http.createServer(app);
-const io = new Server(httpServer, {
+const httpsServer = https.createServer(httpsOptions, app);
+const io = new Server(httpsServer, {
   serveClient: true,
 });
 let connectedPeers = [];
@@ -63,12 +71,12 @@ io.on("connection", (socket) => {
   });
 });
 
-httpServer.listen(parseInt(PORT), HOST, () => {
-  console.log(`Network:\thttp://${HOST}:${PORT}`);
+httpsServer.listen(parseInt(PORT), HOST, () => {
+  console.log(`Network:\thttps://${HOST}:${PORT}`);
 });
 
 if (process.env.NODE_ENV === "development" && HOST !== "localhost") {
-  httpServer.listen(parseInt(PORT), () => {
-    console.log(`Local:\t\thttp://localhost:${PORT}`);
+  httpsServer.listen(parseInt(PORT), () => {
+    console.log(`Local:\thttps://localhost:${PORT}`);
   });
 }

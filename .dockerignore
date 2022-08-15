@@ -6,5 +6,9 @@ Dockerfile
 .dockerignore
 docker-compose.yml
 
+# git
+.git
+.gitignore
+
 # misc
 .env
