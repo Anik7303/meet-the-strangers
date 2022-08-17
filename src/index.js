@@ -5,8 +5,6 @@ const path = require("path");
 const express = require("express");
 const { Server } = require("socket.io");
 
-console.log(process.env.NODE_ENV);
-
 // tls certificates
 const keyFile = fs.readFileSync("key.pem");
 const certFile = fs.readFileSync("cert.pem");
