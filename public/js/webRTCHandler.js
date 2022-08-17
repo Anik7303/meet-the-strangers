@@ -14,13 +14,7 @@ const defaultConstrains = {
 
 const configuration = {
   iceServers: [
-    {
-      urls: [
-        "stun:stun.l.google.com:13902",
-        "stun:stun1.l.google.com",
-        "stun:stun2.l.google.com",
-      ],
-    },
+    { urls: ["stun:stun.l.google.com:13902", "stun:stun1.l.google.com:13902"] },
   ],
 };
 
@@ -29,7 +23,9 @@ export const getLocalPreview = () => {
     navigator.mediaDevices
       .getUserMedia(defaultConstrains)
       .then((stream) => {
+        store.setCallState(constants.callState.CALL_AVAILABLE);
         store.setLocalStream(stream);
+        ui.showVideoCallButtons();
         ui.updateLocalVideo(stream);
       })
       .catch((err) => console.error(err));

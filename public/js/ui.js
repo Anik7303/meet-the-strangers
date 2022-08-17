@@ -23,6 +23,15 @@ export const updateRemoteVideo = (stream) => {
   remoteVideo.srcObject = stream;
 };
 
+export const showVideoCallButtons = () => {
+  const personalCodeVideoButton = document.getElementById(
+    "personal_code_video_button"
+  );
+  const strangerVideoButton = document.getElementById("stranger_video_button");
+  showElement(personalCodeVideoButton);
+  showElement(strangerVideoButton);
+};
+
 export const showIncomingCallDialog = (
   callType,
   acceptCallHandler,
