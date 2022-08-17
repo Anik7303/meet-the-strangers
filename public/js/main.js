@@ -113,6 +113,7 @@ document
   });
 
 // hang up
+
 document.getElementById("hang_up_button").addEventListener("click", () => {
   webRTCHandler.handleHangUp();
 });
