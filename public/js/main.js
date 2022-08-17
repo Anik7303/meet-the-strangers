@@ -111,3 +111,14 @@ document
     recordingUtils.resumeRecording();
     ui.toggleRecordingState();
   });
+
+// hang up
+document.getElementById("hang_up_button").addEventListener("click", () => {
+  webRTCHandler.handleHangUp();
+});
+
+document
+  .getElementById("finish_chat_call_button")
+  .addEventListener("click", () => {
+    webRTCHandler.handleHangUp();
+  });

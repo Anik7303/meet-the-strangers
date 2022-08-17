@@ -57,6 +57,13 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on("user-hanged-up", (data) => {
+    const connectedPeer = connectedPeers.find((peer) => peer === data.socketId);
+    if (connectedPeer) {
+      io.to(connectedPeer).emit("user-hanged-up");
+    }
+  });
+
   socket.on("webRTC-signaling", (data) => {
     const { socketId } = data;
     const connectedPeer = connectedPeers.find((peer) => socketId === peer);
