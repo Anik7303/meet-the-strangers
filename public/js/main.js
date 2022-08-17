@@ -4,6 +4,7 @@ import * as webRTCHandler from "./webRTCHandler.js";
 import * as constants from "./constants.js";
 import * as ui from "./ui.js";
 import * as recordingUtils from "./recordingUtils.js";
+import * as strangerUtils from "./strangerUtils.js";
 
 // initialization of Socket.IO server connection
 const socket = io();
@@ -25,24 +26,48 @@ personalCodeCopyButton.addEventListener("click", () => {
 
 // register event listeners for connection buttons
 const calleePersonalCodeInput = document.getElementById("personal_code_input");
-const personalCodeChatButton = document.getElementById(
-  "personal_code_chat_button"
-);
-const personalCodeVideoButton = document.getElementById(
-  "personal_code_video_button"
-);
 
-personalCodeChatButton.addEventListener("click", () => {
-  const calleePersonalCode = calleePersonalCodeInput.value;
-  const callType = constants.callType.CHAT_PERSONAL_CODE;
-  webRTCHandler.sendPreOffer(callType, calleePersonalCode);
-});
+document
+  .getElementById("personal_code_chat_button")
+  .addEventListener("click", () => {
+    const calleePersonalCode = calleePersonalCodeInput.value;
+    const callType = constants.callType.CHAT_PERSONAL_CODE;
+    webRTCHandler.sendPreOffer(callType, calleePersonalCode);
+  });
 
-personalCodeVideoButton.addEventListener("click", () => {
-  const calleePersonalCode = calleePersonalCodeInput.value;
-  const callType = constants.callType.VIDEO_PERSONAL_CODE;
-  webRTCHandler.sendPreOffer(callType, calleePersonalCode);
-});
+document
+  .getElementById("personal_code_video_button")
+  .addEventListener("click", () => {
+    const calleePersonalCode = calleePersonalCodeInput.value;
+    const callType = constants.callType.VIDEO_PERSONAL_CODE;
+    webRTCHandler.sendPreOffer(callType, calleePersonalCode);
+  });
+
+document
+  .getElementById("stranger_chat_button")
+  .addEventListener("click", () => {
+    strangerUtils.getStrangerSocketIdAndConnect(
+      constants.callType.CHAT_STRANGER
+    );
+  });
+
+document
+  .getElementById("stranger_video_button")
+  .addEventListener("click", () => {
+    strangerUtils.getStrangerSocketIdAndConnect(
+      constants.callType.VIDEO_STRANGER
+    );
+  });
+
+//register event for allow connections from strangers
+document
+  .getElementById("allow_strangers_checkbox")
+  .addEventListener("click", () => {
+    const checkboxState = store.getState().allowConnectionsFromStrangers;
+    strangerUtils.changeStrangerConnectionStatus(!checkboxState);
+    store.setAllowConnectionsFromStrangers(!checkboxState);
+    ui.updateStrangerCheckbox(!checkboxState);
+  });
 
 // event listeners for video call buttons
 document.getElementById("mic_button").addEventListener("click", () => {

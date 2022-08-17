@@ -86,18 +86,36 @@ export const showInfoDialog = (preOfferAnswer) => {
   }
 
   if (infoDialog) {
-    document.getElementById("dialog").appendChild(infoDialog);
-
-    setTimeout(() => {
-      removeAllDialogs();
-    }, 4000);
+    showDialog(infoDialog);
   }
 };
 
+export const showNoStrangerAvailableDialog = () => {
+  let infoDialog = elements.getInfoDialog(
+    "No Stranger available",
+    "Please try again later"
+  );
+
+  if (infoDialog) {
+    showDialog(infoDialog);
+  }
+};
+
+const showDialog = (dialog) => {
+  document.getElementById("dialog").appendChild(dialog);
+  setTimeout(() => removeAllDialogs(), 4000);
+};
+
 export const showCallElements = (callType) => {
-  if (callType === constants.callType.CHAT_PERSONAL_CODE) {
+  if (
+    callType === constants.callType.CHAT_PERSONAL_CODE ||
+    callType === constants.callType.CHAT_STRANGER
+  ) {
     showChatCallElements();
-  } else if (callType === constants.callType.VIDEO_PERSONAL_CODE) {
+  } else if (
+    callType === constants.callType.VIDEO_PERSONAL_CODE ||
+    callType === constants.callType.VIDEO_STRANGER
+  ) {
     showVideoCallElements();
   }
 };
@@ -214,6 +232,12 @@ export const updateUIAfterHangUp = (callType) => {
   showElement(placeholder);
 
   removeAllDialogs();
+};
+
+//  changing status of checkout
+export const updateStrangerCheckbox = (allowConnections) => {
+  const checkboxImg = document.getElementById("allow_strangers_checkbox_image");
+  allowConnections ? showElement(checkboxImg) : hideElement(checkboxImg);
 };
 
 // ui helper function

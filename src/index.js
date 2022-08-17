@@ -20,6 +20,7 @@ const io = new Server(httpsServer, {
   serveClient: true,
 });
 let connectedPeers = [];
+let connectedPeersStrangers = [];
 
 app.use(express.static(path.join(__dirname, "..", "public")));
 
@@ -62,6 +63,17 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on("stranger-connection-status", (data) => {
+    const { status } = data;
+    if (status) {
+      connectedPeersStrangers.push(socket.id);
+    } else {
+      connectedPeersStrangers = connectedPeersStrangers.filter(
+        (peer) => peer !== socket.id
+      );
+    }
+  });
+
   socket.on("webRTC-signaling", (data) => {
     const { socketId } = data;
     const connectedPeer = connectedPeers.find((peer) => socketId === peer);
@@ -71,8 +83,25 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on("get-stranger-socket-id", () => {
+    let randomStrangerSocketId = null;
+    const filteredPeerList = connectedPeersStrangers.filter(
+      (stranger) => stranger !== socket.id
+    );
+    if (filteredPeerList.length > 0) {
+      const index = Math.floor(Math.random() * filteredPeerList.length);
+      randomStrangerSocketId = filteredPeerList[index];
+    }
+
+    const data = { randomStrangerSocketId };
+    io.to(socket.id).emit("stranger-socket-id", data);
+  });
+
   socket.on("disconnect", () => {
     connectedPeers = connectedPeers.filter((peer) => peer !== socket.id);
+    connectedPeersStrangers = connectedPeersStrangers.filter(
+      (peer) => peer !== socket.id
+    );
   });
 });
 
